@@ -6,6 +6,7 @@
  */
 import '../styles/app.css'
 import './css/style.css';
+import './css/cruip.css';
 /* Additional styles */
 import './css/additional-styles/utility-patterns.css';
 import './css/additional-styles/flatpickr.css';

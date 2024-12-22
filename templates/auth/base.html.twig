@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} | Bremsworks</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script>
+        if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
+            document.querySelector('html').classList.remove('dark');
+            document.querySelector('html').style.colorScheme = 'light';
+        } else {
+            document.querySelector('html').classList.add('dark');
+            document.querySelector('html').style.colorScheme = 'dark';
+        }
+    </script>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
+</head>
+
+<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 sidebar-expanded">
+    <main class="bg-white dark:bg-gray-900">
+
+        <div class="relative flex">
+
+            <!-- Content -->
+            <div class="w-full md:w-1/2">
+
+                <div class="min-h-[100dvh] h-full flex flex-col after:flex-1">
+
+                    <!-- Header -->
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                            <!-- Logo -->
+                            <a class="block" href="index.html">
+                                <span class="font-bold">BW</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="max-w-sm mx-auto w-full px-4 py-8">
+                        {% block body %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    {# TODO change styling to be customer facing #}
+    {% block importmap %}{{ importmap('admin') }}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Alpine.start();
+        });
+    </script>
+</body>
+</html>

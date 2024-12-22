@@ -1,0 +1,99 @@
+{% extends "auth/base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+    <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">Welcome back!</h1>
+    <!-- Form -->
+    <form>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1" for="email">Email</label>
+                <input id="email" class="form-input w-full" type="email">
+            </div>
+
+        </div>
+        <div class="flex items-center justify-between mt-6">
+            <div class="mr-1">
+{#                <button id="step-one-trigger" class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">Code</button>#}
+                {#                <a class="text-sm underline hover:no-underline" href="reset-password.html">Forgot Password?</a>#}
+            </div>
+        </div>
+        <div id="login-choose">
+            <h2 class="text-lg text-gray-800 dark:text-gray-100 font-bold mb-6">Choose your desired passcode</h2>
+            <div class="mt-6">
+                <button id="login-password-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">Password</button>
+                <button id="login-otc-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white mt-4">One Time Code by email</button>
+            </div>
+        </div>
+        <div id="login-password" class="hidden">
+            <label class="block text-sm font-medium mb-1" for="password">Password</label>
+            <input id="password" class="form-input w-full" type="password" autocomplete="on">
+        </div>
+        <div id="login-otc" class="hidden">
+            <p class="text-sm text-gray-800 dark:text-gray-100 mb-6">We have sent you a one time code. It expires in 5 minutes. Please check your email.</p>
+            <input id="otc" class="form-input w-full" type="text">
+        </div>
+
+    </form>
+    <!-- Footer -->
+    <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
+        <div class="text-sm">
+            Don’t have an account? <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="signup.html">Sign Up</a>
+        </div>
+        <!-- Warning -->
+        <div class="mt-5">
+            <div class="bg-green-500/20 text-green-700 px-3 py-2 rounded-lg">
+                <span class="text-sm">Thank you for supporting our store!</span>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    //TODO require that email is filled and valid before allowing second option
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailInput = document.querySelector('#email');
+        const loginPasswordTrigger = document.querySelector('#login-password-trigger');
+        const loginOtcTrigger = document.querySelector('#login-otc-trigger');
+
+        const loginChoose = document.querySelector('#login-choose');
+        const loginPassword = document.querySelector('#login-password');
+        const loginOtc = document.querySelector('#login-otc');
+
+        const otcField = document.querySelector('#otc');
+
+        loginPasswordTrigger.addEventListener('click', () => {
+            loginChoose.classList.add('hidden');
+            loginPassword.classList.remove('hidden');
+        })
+
+        loginOtcTrigger.addEventListener('click', () => {
+            loginChoose.classList.add('hidden');
+            loginOtc.classList.remove('hidden');
+
+            requestOtc(emailInput.value)
+        })
+
+        otcField.addEventListener('input', () => {
+            otcField.value = otcField.value.toLocaleUpperCase();
+        })
+    });
+
+    //TODO verify email first
+
+    function requestOtc(email) {
+        fetch('{{ path('auth_otc_request') }}', {
+            method: "POST",
+            body: JSON.stringify({"email": email})
+        })
+        .then((response) => {
+            if(response.status === 400) {
+                //TODO replace
+                window.alert("Invalid e-mail!")
+            }
+        })
+        .then((data) => {
+            console.log(data);
+        })
+    }
+</script>
+{% endblock %}
