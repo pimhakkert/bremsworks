@@ -17,7 +17,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
     /**
@@ -29,20 +29,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $password = null;
 
     /**
      * @var string The One Time Code generated for this user
      */
-    #[ORM\Column]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $otc = null;
 
     /**
      * @var \DateTimeImmutable When the OTC was generated for this user
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $otcCreated = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $verifyEmailToken = null;
+
+    #[ORM\Column]
+    private string $firstName;
+
+    #[ORM\Column]
+    private string $lastName;
+
+    #[ORM\Column]
+    private bool $wantsMarketingEmails;
 
     public function getId(): ?int
     {
@@ -147,5 +159,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getOtcCreated(): ?\DateTimeImmutable
     {
         return $this->otcCreated;
+    }
+
+    public function getVerifyEmailToken(): ?string
+    {
+        return $this->verifyEmailToken;
+    }
+
+    public function setVerifyEmailToken(?string $verifyEmailToken): User
+    {
+        $this->verifyEmailToken = $verifyEmailToken;
+        return $this;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): User
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): User
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function isWantsMarketingEmails(): bool
+    {
+        return $this->wantsMarketingEmails;
+    }
+
+    public function setWantsMarketingEmails(bool $wantsMarketingEmails): User
+    {
+        $this->wantsMarketingEmails = $wantsMarketingEmails;
+        return $this;
     }
 }

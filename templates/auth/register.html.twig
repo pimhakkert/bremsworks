@@ -1,0 +1,49 @@
+{% extends "auth/base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+{# TODO improve   #}
+    {% if genericError %}
+        <div class="alert alert-danger">Something went wrong. Please try again later.</div>
+    {% endif %}
+    <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">Create your Account</h1>
+    <!-- Form -->
+    <form method="post" action="{{ path('auth_register') }}">
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1" for="email">Email Address <span class="text-red-500">*</span></label>
+                <input name="email" class="form-input w-full" type="email" required="required" />
+            </div>
+            <div class="flex justify-between gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="first_name">First Name <span class="text-red-500">*</span></label>
+                    <input name="first_name" class="form-input w-full" type="text" required="required" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="last_name">Last Name <span class="text-red-500">*</span></label>
+                    <input name="last_name" class="form-input w-full" type="text" required="required" />
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1" for="password">Password <span class="text-red-500">*</span></label>
+                <input name="password" class="form-input w-full" type="password" autocomplete="on" />
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+            <div class="mr-1">
+                <label class="flex items-center">
+                    <input name="email_for_news" type="checkbox" class="form-checkbox" />
+                    <span class="text-sm ml-2">Email me about news</span>
+                </label>
+            </div>
+            <button class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white ml-3 whitespace-nowrap">Sign Up</button>
+        </div>
+    </form>
+    <!-- Footer -->
+    <div class="pt-5 mt-6 border-t border-gray-100 dark:border-gray-700/60">
+        <div class="text-sm">
+            Have an account? <a class="font-medium text-violet-500 hover:text-violet-600 dark:hover:text-violet-400" href="{{ path('auth_login') }}">Sign In</a>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

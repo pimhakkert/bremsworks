@@ -1,0 +1,9 @@
+{% extends "auth/base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+    <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">Your email has been verified.</h1>
+    <p>You are now logged in. Click the button to continue.</p>
+    <a href="{{ path('auth_loggedin') }}" class="w-full btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white mt-4">Continue</a>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

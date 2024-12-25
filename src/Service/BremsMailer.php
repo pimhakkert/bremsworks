@@ -9,9 +9,15 @@ class BremsMailer
 
     const WAYPOINT_URL = "https://live.waypointapi.com/v1/email_messages";
     const WAYPOINT_OTC_TEMPLATE_ID = "wptemplate_HnPJXA9ACT6wMKek";
+    const WAYPOINT_VERIFICATION_EMAIL_TEMPLATE_ID = "wptemplate_U3AW5SB8DLZz6Zbf";
 
     public function __construct(private HttpClientInterface $client, private $waypoint_username, private $waypoint_password)
     {
+    }
+
+    public function sendVerificationEmail(string $to, $firstName, $verificationUrl)
+    {
+        return $this->sendMail($to, self::WAYPOINT_VERIFICATION_EMAIL_TEMPLATE_ID, ["display_name" => $firstName, "verification_url" => $verificationUrl]);
     }
 
     public function sendOtcMail(string $to, string $characters)

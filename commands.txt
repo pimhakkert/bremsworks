@@ -1,1 +1,8 @@
 php bin/console tailwind:build --watch --poll
+sudo chown --recursive --from=user root data/
+/////START
+HTTP_PORT=8000 \
+SERVER_NAME=http://localhost \
+MERCURE_PUBLIC_URL=http://localhost/.well-known/mercure \
+docker compose up --pull always -d --wait
+/////ENDSTART
