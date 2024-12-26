@@ -26,6 +26,8 @@ class AuthController extends AbstractController
     #[Route(path: '/login', name: 'auth_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        $title = 'Login';
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -35,6 +37,7 @@ class AuthController extends AbstractController
         return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+            'title' => $title,
         ]);
     }
 
@@ -51,9 +54,13 @@ class AuthController extends AbstractController
      * @return Response
      */
     #[Route(path: '/loggedin', name: 'auth_loggedin')]
-    public function loggedIn(Request $request): Response
+    public function loggedIn(Request $request, Security $security): Response
     {
-        return new Response("ttt");
+        if($security->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin_home');
+        } else {
+            return new Response("Customer flow not yet finished");
+        }
     }
 
     #[Route('/register', name: 'auth_register')]
@@ -137,16 +144,17 @@ class AuthController extends AbstractController
         }
 
         //Get user from email
-//        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
-//
-//        //Do not tell end user email does not exist
-//        if(!$user) {
-//            return new Response("", 200);
-//        }
-//
-//        $otc = $user->generateOtc();
-//        $entityManager->flush();
-        $otc = "123ABC";
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+
+        //Do not tell end user email does not exist
+        if(!$user) {
+            return new Response("", 200);
+        }
+
+        $user->generateOtc();
+        $entityManager->flush();
+
+        $otc = $user->getOtc();
 
         //SEND EMAIL
         $result = $bremsMailer->sendOtcMail($data['email'], $otc);

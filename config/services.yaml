@@ -26,3 +26,5 @@ services:
         arguments:
             $waypoint_username: '%env(string:WAYPOINT_USERNAME)%'
             $waypoint_password: '%env(string:WAYPOINT_PASSWORD)%'
+    
+    App\Security\CustomLoginFormAuthenticator:

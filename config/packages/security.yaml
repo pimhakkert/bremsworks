@@ -15,12 +15,14 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            custom_authenticators:
+                - App\Security\CustomLoginFormAuthenticator
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: auth_login
-                check_path: auth_login
-                enable_csrf: true
+#            form_login:
+#                login_path: auth_login
+#                check_path: auth_login
+#                enable_csrf: true
             logout:
                 path: auth_logout
                 # where to redirect after logout
@@ -37,6 +39,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
 when@test:
     security:
