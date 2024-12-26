@@ -1,11 +1,11 @@
 {% extends "auth/base.html.twig" %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
+    <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">Welcome back!</h1>
     {# TODO make look nice #}
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="alert alert-danger text-red-500 my-4">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-    <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-bold mb-6">Welcome back!</h1>
     <!-- Form -->
     <form method="post">
         <input type="hidden" name="_csrf_token"
@@ -27,8 +27,8 @@
         <div id="login-choose">
             <h2 class="text-lg text-gray-800 dark:text-gray-100 font-bold mb-6">Choose your desired passcode</h2>
             <div class="mt-6">
-                <button id="login-password-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">Password</button>
-                <button id="login-otc-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white mt-4">One Time Code by email</button>
+                <button id="login-password-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white disabled:border-gray-200 dark:disabled:border-gray-700 disabled:bg-white dark:disabled:bg-gray-800 disabled:text-gray-300 dark:disabled:text-gray-600 disabled:cursor-not-allowed" disabled>Password</button>
+                <button id="login-otc-trigger" type="button" class="w-full btn btn-sm bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white disabled:border-gray-200 dark:disabled:border-gray-700 disabled:bg-white dark:disabled:bg-gray-800 disabled:text-gray-300 dark:disabled:text-gray-600 disabled:cursor-not-allowed mt-4" disabled>One Time Code by email</button>
             </div>
         </div>
         <div id="login-password" class="hidden">
@@ -61,6 +61,8 @@
 <script>
     //TODO require that email is filled and valid before allowing second option
     document.addEventListener('DOMContentLoaded', function () {
+        let validEmailEntered = false;
+        let allowEnterSubmit = false;
         const emailInput = document.querySelector('#email');
         const loginPasswordTrigger = document.querySelector('#login-password-trigger');
         const loginOtcTrigger = document.querySelector('#login-otc-trigger');
@@ -72,13 +74,31 @@
 
         const otcField = document.querySelector('#otc');
 
+        const form = document.querySelector('form');
+
+        emailInput.addEventListener('input', (event) => {
+            if(validateEmail(emailInput.value)) {
+                validEmailEntered = true;
+                loginPasswordTrigger.disabled = false;
+                loginOtcTrigger.disabled = false;
+            } else {
+                validEmailEntered = false;
+                loginPasswordTrigger.disabled = true;
+                loginOtcTrigger.disabled = true;
+            }
+        })
+
         loginPasswordTrigger.addEventListener('click', () => {
+            if(!validEmailEntered) return;
+            allowEnterSubmit = true;
             loginChoose.classList.add('hidden');
             loginPassword.classList.remove('hidden');
             loginButton.classList.remove('hidden');
         })
 
         loginOtcTrigger.addEventListener('click', () => {
+            if(!validEmailEntered) return;
+            allowEnterSubmit = true;
             loginChoose.classList.add('hidden');
             loginOtc.classList.remove('hidden');
             loginButton.classList.remove('hidden');
@@ -88,10 +108,32 @@
 
         otcField.addEventListener('input', () => {
             otcField.value = otcField.value.toLocaleUpperCase();
+            otcField.value = otcField.value.replace(/[^A-Z0-9]/g, "");
+        })
+
+        form.addEventListener('keydown', (event) => {
+            if(!allowEnterSubmit && event.code === 'Enter') {
+                event.preventDefault();
+            }
         })
     });
 
-    //TODO verify email first
+    function validateEmail(string){
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+        if (reg.test(string) === false)
+        {
+            return false;
+        }
+
+        return true;
+
+    }
+
+    function onlyAlphabets(e, t) {
+        var regexp = new RegExp(/^[a-zA-Z0-9]*$/);
+        return regexp.test(t.value);
+    }
 
     function requestOtc(email) {
         fetch('{{ path('auth_otc_request') }}', {

@@ -157,7 +157,7 @@ class AuthController extends AbstractController
         $otc = $user->getOtc();
 
         //SEND EMAIL
-        $result = $bremsMailer->sendOtcMail($data['email'], $otc);
+        $result = $bremsMailer->sendOtcMail($data['email'], $user->getFirstName(), $otc);
         if(!$result) {
             return new Response(null, 500);
         }

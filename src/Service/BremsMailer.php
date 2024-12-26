@@ -20,12 +20,12 @@ class BremsMailer
         return $this->sendMail($to, self::WAYPOINT_VERIFICATION_EMAIL_TEMPLATE_ID, ["display_name" => $firstName, "verification_url" => $verificationUrl]);
     }
 
-    public function sendOtcMail(string $to, string $characters)
+    public function sendOtcMail(string $to, string $firstName, string $characters)
     {
         $arr = str_split($characters);
 
         return $this->sendMail($to, self::WAYPOINT_OTC_TEMPLATE_ID, variables: [
-            "displayName" => "Tester",
+            "display_name" => $firstName,
             "char_1" => $arr[0],
             "char_2" => $arr[1],
             "char_3" => $arr[2],
