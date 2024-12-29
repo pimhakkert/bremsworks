@@ -94,6 +94,8 @@
             loginChoose.classList.add('hidden');
             loginPassword.classList.remove('hidden');
             loginButton.classList.remove('hidden');
+
+            loginPassword.querySelector('input').focus();
         })
 
         loginOtcTrigger.addEventListener('click', () => {
@@ -102,6 +104,8 @@
             loginChoose.classList.add('hidden');
             loginOtc.classList.remove('hidden');
             loginButton.classList.remove('hidden');
+
+            loginOtc.querySelector('input').focus();
 
             requestOtc(emailInput.value)
         })
