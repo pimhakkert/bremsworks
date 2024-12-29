@@ -48,6 +48,16 @@ class Isotope
         self::TH_232
     ];
 
+    const ALL_SHORTHANDS_TO_NAMES = [
+        self::AM_241 => self::AMERICIUM_241,
+        self::CS_137 => self::CESIUM_137,
+        self::CO_60 => self::COBALT_60,
+        self::SR_90 => self::STRONTIUM_90,
+        self::U_235 => self::URANIUM_235,
+        self::U_238 => self::URANIUM_238,
+        self::TH_232 => self::THORIUM_232
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
