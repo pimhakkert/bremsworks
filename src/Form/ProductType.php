@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Isotope;
 use App\Entity\Product;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -50,11 +49,12 @@ class ProductType extends AbstractType
                 'choice_label' => 'name',
                 'multiple' => true,
                 'choice_value' => 'id',
-//                'attr' => [
-//                    'data-options' => json_encode([
-//                        'maxItems' => 1
-//                    ])
-//                ]
+                'attr' => [
+                    'data-options' => json_encode([
+                        'maxItems' => 3,
+                        'plugins' => ['remove_button']
+                    ])
+                ]
             ])
         ;
     }

@@ -44,11 +44,11 @@
                 {% dump(form.vars.value) %}
                 <option
                     value="{{ choice.value }}"
-{#                    {% if form.vars.multiple and choice.value in form.vars.value %}#}
-{#                        selected#}
-{#                    {% elseif choice.value == form.vars.value %}#}
-{#                        selected#}
-{#                    {% endif %}#}
+                    {% if form.vars.multiple and choice.value in form.vars.value %}
+                        selected
+                    {% elseif choice.value == form.vars.value %}
+                        selected
+                    {% endif %}
                 >
                     {{ choice.label }}
                 </option>
@@ -64,12 +64,12 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            {#const select = document.querySelector('#{{ form.vars.id }}');#}
-            {#let options = {};#}
-            {#if('options' in select.dataset) {#}
-            {#    options = JSON.parse(select.dataset.options);#}
-            {#}#}
-            {#new TomSelect(select, {});#}
+            const select = document.querySelector('#{{ form.vars.id }}');
+            let options = {};
+            if('options' in select.dataset) {
+                options = JSON.parse(select.dataset.options);
+            }
+            new TomSelect(select, options);
         });
 
 

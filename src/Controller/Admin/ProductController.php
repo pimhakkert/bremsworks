@@ -49,6 +49,27 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('admin_products_list');
         }
 
-        return $this->render('admin/products/create.html.twig', get_defined_vars());
+        return $this->render('admin/products/detail.html.twig', get_defined_vars());
+    }
+
+    #[Route('/{id}', name: 'detail')]
+    public function adminProductDetail(Request $request, EntityManagerInterface $entityManager, Product $product): Response
+    {
+        $title = 'Edit Product';
+
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+        $formView = $form->createView();
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $product = $form->getData();
+            $entityManager->persist($product);
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_products_list');
+        }
+
+        return $this->render('admin/products/detail.html.twig', get_defined_vars());
     }
 }

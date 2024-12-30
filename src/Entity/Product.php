@@ -185,12 +185,14 @@ class Product
         return $this;
     }
 
-    public function getPrice($inCents = false): int|float
+    public function getPrice(): int
     {
-        if(!$inCents) {
-            return $this->price / 100.0;
-        }
         return $this->price;
+    }
+
+    public function getPriceAsFloat(): float
+    {
+        return $this->price / 100.0;
     }
 
     public function setPrice(int $price): Product

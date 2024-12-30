@@ -133,7 +133,7 @@
                             </div>
                         </td>
                         <td class="first:pl-5 last:pr-5 whitespace-nowrap">
-                            <a href="{{ path('admin_home') }}" class="px-2 py-3 flex items-center">
+                            <a href="{{ path('admin_products_detail', {'id': product.id}) }}" class="px-2 py-3 flex items-center">
                                 <div  class="font-medium text-sky-700 dark:text-sky-500">{{ product.title|u.truncate(60, '...') }}</div>
                             </a>
                         </td>
@@ -141,7 +141,7 @@
                             <div>{{ product.category }}</div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left font-medium text-green-600">{{ product.price|format_currency('EUR')}}</div>
+                            <div class="text-left font-medium text-green-600">{{ product.priceAsFloat|format_currency('EUR')}}</div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-left font-medium">{{ product.quantity }}</div>
