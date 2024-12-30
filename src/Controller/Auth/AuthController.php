@@ -3,14 +3,12 @@
 namespace App\Controller\Auth;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Service\BremsMailer;
+use App\Service\TimezoneHelper;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +17,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\ValidatorBuilder;
 
 class AuthController extends AbstractController
 {
@@ -64,7 +61,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/register', name: 'auth_register')]
-    public function register(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager, BremsMailer $bremsMailer): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager, BremsMailer $bremsMailer, TimezoneHelper $timezoneHelper): Response
     {
         $title = 'Register';
         $genericError = false;
@@ -78,7 +75,15 @@ class AuthController extends AbstractController
             $password = $request->request->get('password');
             $wantsMarketingEmails = $request->request->has('email_for_news');
 
-            if(empty($email) || empty($firstName) || empty($lastName) || empty($password)) {
+            $timezoneCorrect = true;
+            $timezone = '';
+            try {
+                $timezone = new DateTimeZone($request->request->get('timezone'));
+            } catch (\Exception $e) {
+                $timezoneCorrect = false;
+            }
+
+            if(empty($email) || empty($firstName) || empty($lastName) || empty($password) || !$timezoneCorrect) {
                 $genericError = true;
                 goto renderView;
             }
@@ -92,6 +97,7 @@ class AuthController extends AbstractController
             $user->setPassword($hasher->hashPassword($user, $password));
             $user->setVerifyEmailToken(uniqid());
             $user->setOtc(null);
+            $user->setTimezone($timezone);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -109,6 +115,8 @@ class AuthController extends AbstractController
         }
 
         renderView:
+        $tzlist = $timezoneHelper->getPrettyTimezones();
+
         return $this->render('auth/register.html.twig', get_defined_vars());
     }
 

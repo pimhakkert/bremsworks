@@ -56,6 +56,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $wantsMarketingEmails;
 
+    /*
+     * The preferred timezone of the user. This only affects the UI. Personalized, generated documents display datetimes
+     * in both the user timezone and UTC.
+     */
+    #[ORM\Column]
+    private string $timezone;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -153,7 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->otc = $randomString;
-        $this->otcCreated = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $this->otcCreated = new \DateTimeImmutable();
     }
 
     public function getOtcCreated(): ?\DateTimeImmutable
@@ -202,6 +209,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWantsMarketingEmails(bool $wantsMarketingEmails): User
     {
         $this->wantsMarketingEmails = $wantsMarketingEmails;
+        return $this;
+    }
+
+    public function getTimezone(): \DateTimeZone
+    {
+        return new \DateTimeZone($this->timezone);
+    }
+
+    //Used in Twig
+    public function getTimezoneName(): string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(\DateTimeZone $timezone): User
+    {
+        $this->timezone = $timezone->getName();
         return $this;
     }
 }

@@ -2,6 +2,8 @@ twig:
     form_themes: ['admin/form/theme.html.twig']
     file_name_pattern: '*.twig'
 #    debug: true
+    globals:
+        timezoneHelper: "@TimezoneHelper"
 
 when@test:
     twig:

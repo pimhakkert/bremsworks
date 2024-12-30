@@ -147,7 +147,7 @@
                             <div class="text-left font-medium">{{ product.quantity }}</div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left">{{ product.createdAt|date('d/m/Y') }}</div>
+                            <div class="text-left">{{ product.createdAt|date('d/m/Y', userTimezone) }}</div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="inline-flex font-medium bg-green-500/20 text-green-700 rounded-full text-center px-2.5 py-0.5">Yes</div>

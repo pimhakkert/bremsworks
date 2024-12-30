@@ -49,7 +49,7 @@ class CustomLoginFormAuthenticator extends AbstractLoginFormAuthenticator
             if($user && $user->getOtcCreated() !== null) {
 
                 //Check if the OTC is still valid
-                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+                $now = new \DateTimeImmutable();
                 $otcCreated = $user->getOtcCreated();
 
                 //Max time of 10 minutes

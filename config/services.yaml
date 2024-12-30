@@ -28,3 +28,7 @@ services:
             $waypoint_password: '%env(string:WAYPOINT_PASSWORD)%'
     
     App\Security\CustomLoginFormAuthenticator:
+        
+    TimezoneHelper:
+        class: App\Service\TimezoneHelper
+        public: true
