@@ -17,6 +17,8 @@ import 'chart.js';
 import 'moment';
 import 'chartjs-adapter-moment';
 import 'flatpickr'
+import 'https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js';
+import 'tom-select/dist/css/tom-select.default.min.css';
 
 //Other
 import './js/main.js'
@@ -24,5 +26,3 @@ import './js/main.js'
 import './js/flatpickr-init.js'
 
 window.Alpine = Alpine
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');

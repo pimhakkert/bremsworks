@@ -6,3 +6,4 @@ SERVER_NAME=http://localhost \
 MERCURE_PUBLIC_URL=http://localhost/.well-known/mercure \
 docker compose up --pull always -d --wait
 /////ENDSTART
+docker compose down --remove-orphans

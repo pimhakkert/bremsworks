@@ -1,0 +1,111 @@
+{% block text_row %}
+    <div class="mb-4">
+        <label for="{{ form.vars.id }}" class="block text-sm font-medium mb-1">{{ form_label(form) }} {% if required %}<span class="text-red-500">*</span>{% endif %}</label>
+        <input
+            id="{{ form.vars.id }}"
+            name="{{ form.vars.full_name }}"
+            value="{{ value }}"
+            class="form-input w-full"
+            type="text"
+            placeholder="{{ form.vars.attr.placeholder|default('') }}"
+            {% if required %} required {% endif %}
+            {% for attr_name, attr_value in form.vars.attr %}
+                {{ attr_name }}="{{ attr_value }}"
+            {% endfor %}
+        >
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-xs mt-1 text-red-500">
+                {% for error in form.vars.errors %}
+                    <p>{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block choice_row %}
+    <div class="mb-4">
+        <label for="{{ form.vars.id }}" class="block text-sm font-medium mb-1">
+            {{ form_label(form) }} {% if required %}<span class="text-red-500">*</span>{% endif %}
+        </label>
+        <select
+            id="{{ form.vars.id }}"
+            name="{{ form.vars.full_name }}"
+            class="form-select w-full"
+            {% if required %} required {% endif %}
+            {% if form.vars.multiple %} multiple {% endif %}
+            {% for attr_name, attr_value in form.vars.attr %}
+                {{ attr_name }}="{{ attr_value }}"
+            {% endfor %}
+        >
+            {% dump(form.vars.choices) %}
+            {% for choice in form.vars.choices %}
+                {% dump(choice) %}
+                {% dump(form.vars.value) %}
+                <option
+                    value="{{ choice.value }}"
+{#                    {% if form.vars.multiple and choice.value in form.vars.value %}#}
+{#                        selected#}
+{#                    {% elseif choice.value == form.vars.value %}#}
+{#                        selected#}
+{#                    {% endif %}#}
+                >
+                    {{ choice.label }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-xs mt-1 text-red-500">
+                {% for error in form.vars.errors %}
+                    <p>{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {#const select = document.querySelector('#{{ form.vars.id }}');#}
+            {#let options = {};#}
+            {#if('options' in select.dataset) {#}
+            {#    options = JSON.parse(select.dataset.options);#}
+            {#}#}
+            {#new TomSelect(select, {});#}
+        });
+
+
+    </script>
+{% endblock %}
+
+{% block integer_row %}
+    <div class="mb-4">
+        <label for="{{ form.vars.id }}" class="block text-sm font-medium mb-1">
+            {{ form_label(form) }}
+            {% if required %}
+                <span class="text-red-500">*</span>
+            {% endif %}
+        </label>
+
+        {# Render the number input field with custom attributes #}
+        <input
+            id="{{ form.vars.id }}"
+            name="{{ form.vars.full_name }}"
+            value="{{ form.vars.value }}"
+            class="form-input w-full"
+            type="number"
+            placeholder="{{ form.vars.attr.placeholder|default('') }}"
+            {% if required %} required {% endif %}
+            {% for attr_name, attr_value in form.vars.attr %}
+                {{ attr_name }}="{{ attr_value }}"
+            {% endfor %}
+        >
+
+        {# Display validation errors #}
+        {% if form.vars.errors|length > 0 %}
+            <div class="text-xs mt-1 text-red-500">
+                {% for error in form.vars.errors %}
+                    <p>{{ error.message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

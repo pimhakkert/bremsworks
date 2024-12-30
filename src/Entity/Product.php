@@ -5,7 +5,10 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -47,18 +50,28 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Gedmo\Timestampable]
+    public ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    public ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\ManyToOne]
     private ?User $reservedBy = null;
 
+    #[Assert\Length(min: 15, max: 255)]
     #[ORM\Column(length: 255)]
     private string $title;
 
-    #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 30)]
+    #[ORM\Column(type: 'text')]
     private string $description;
 
     #[ORM\Column]
     private int $quantity;
 
+    #[Assert\GreaterThanOrEqual(100)]
     #[ORM\Column]
     private int $price;
 
@@ -68,7 +81,7 @@ class Product
     /**
      * @var Collection<int, Isotope>
      */
-    #[ORM\ManyToMany(targetEntity: Isotope::class, mappedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: Isotope::class, inversedBy: 'products')]
     private Collection $isotopes;
 
     #[ORM\Column]
@@ -83,21 +96,22 @@ class Product
     #[ORM\Column]
     private int $weight;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column()]
     private string $color;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column()]
     private string $brand;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column()]
     private string $model;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column()]
     private string $condition;
 
     public function __construct()
     {
         $this->isotopes = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }
 
     public function getId(): ?int
@@ -109,6 +123,22 @@ class Product
     {
         $this->id = $id;
         return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): Product
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
     }
 
     public function getReservedBy(): ?User
@@ -155,8 +185,11 @@ class Product
         return $this;
     }
 
-    public function getPrice(): int
+    public function getPrice($inCents = false): int|float
     {
+        if(!$inCents) {
+            return $this->price / 100.0;
+        }
         return $this->price;
     }
 

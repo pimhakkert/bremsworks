@@ -12,7 +12,7 @@ class Isotope
 {
     /*Isotope names*/
     const AMERICIUM_241 = 'Americium-241';
-    const CESIUM_137 = 'CESIUM-137';
+    const CESIUM_137 = 'Cesium-137';
     const COBALT_60 = 'Cobalt-60';
     const STRONTIUM_90 = 'Strontium-90';
     const URANIUM_235 = 'Uranium-235';
@@ -72,7 +72,7 @@ class Isotope
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'isotopes')]
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'isotopes')]
     private Collection $products;
 
     public function __construct()
@@ -129,6 +129,7 @@ class Isotope
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
+            $product->addIsotope($this);
         }
 
         return $this;
@@ -137,6 +138,7 @@ class Isotope
     public function removeProduct(Product $product): static
     {
         $this->products->removeElement($product);
+        $product->removeIsotope($this);
 
         return $this;
     }

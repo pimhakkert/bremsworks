@@ -11,8 +11,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin', name: 'admin_')]
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function number(): Response
+    #[Route('', name: 'home')]
+    public function adminHome(): Response
     {
         $title = 'Admin Home';
         return $this->render('admin/index.html.twig', get_defined_vars());
